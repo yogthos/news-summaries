@@ -11,7 +11,7 @@ const __dirname = dirname(__filename);
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-// Serve static files from public directory
+// Serve static files from public directory (for React build)
 app.use(express.static(join(__dirname, 'public')));
 
 // API endpoint to get analysis data
@@ -92,9 +92,16 @@ function parseAnalysisOutput(analysisText) {
     };
 }
 
-// Serve the main page
+// Serve the main page (React app)
 app.get('/', (req, res) => {
     res.sendFile(join(__dirname, 'public', 'index.html'));
+});
+
+// Handle React routing - serve index.html for all non-API routes
+app.get('*', (req, res) => {
+    if (!req.path.startsWith('/api')) {
+        res.sendFile(join(__dirname, 'public', 'index.html'));
+    }
 });
 
 app.listen(PORT, () => {
