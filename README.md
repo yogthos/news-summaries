@@ -6,13 +6,9 @@ An intelligent RSS feed aggregator and analyzer that fetches news from multiple 
 
 - **Multi-source RSS aggregation**: Fetches articles from various news sources and Reddit communities
 - **AI-powered analysis**: Uses DeepSeek AI to identify and summarize the most important articles
-- **Web interface**: Modern React-based UI with tabs for analysis, raw data, and statistics
+- **Modern web interface**: Clean, responsive UI built with React and Bulma CSS
 - **Real-time processing**: Analyzes feeds on-demand with intelligent categorization
-
-The application provides a clean web interface with:
-- **Analysis Tab**: AI-generated insights and categorized articles
-- **Raw Data Tab**: Complete feed data and processing results
-- **Statistics Tab**: Feed status and article counts
+- **Geopolitical focus**: Specialized analysis of economic and geopolitical news
 
 ## Installation
 
@@ -191,7 +187,7 @@ rss-summaries/
 ## Dependencies
 
 - **Backend**: Express.js, Axios, Marked
-- **Frontend**: React, Vite
+- **Frontend**: React, Vite, Bulma CSS, Font Awesome
 - **AI**: DeepSeek API integration
 - **RSS**: Custom feed parser
 

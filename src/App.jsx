@@ -38,23 +38,23 @@ function App() {
   const renderAnalysis = () => {
     if (loading) {
       return (
-        <div className="loading">
+        <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading analysis...</p>
+          <p className="has-text-grey">Loading analysis...</p>
         </div>
       )
     }
 
     if (error) {
       return (
-        <div className="error-message">
+        <div className="notification is-danger error-notification">
           Error loading data: {error}. Please try again.
         </div>
       )
     }
 
     if (!data?.analysis) {
-      return <p>No analysis data available.</p>
+      return <p className="has-text-grey">No analysis data available.</p>
     }
 
     // If we have HTML from markdown parsing, use it
@@ -71,27 +71,33 @@ function App() {
     return (
       <>
         {data.analysis.summary && (
-          <div className="summary">
-            <h3>Key Takeaways</h3>
-            <div>{data.analysis.summary}</div>
+          <div className="card summary-card">
+            <div className="card-content">
+              <h3 className="title is-4 has-text-info">Key Takeaways</h3>
+              <div className="content">{data.analysis.summary}</div>
+            </div>
           </div>
         )}
 
         {data.analysis.categories && Object.entries(data.analysis.categories).map(([category, articles]) => (
-          <div key={category} className="section">
-            <h3>{category}</h3>
-            {articles.map((article, index) => (
-              <div key={index} className="article">
-                <h4>
-                  <a href={article.link} target="_blank" rel="noopener noreferrer">
-                    {article.title}
-                  </a>
-                </h4>
-                {article.description && (
-                  <div className="description">{article.description}</div>
-                )}
-              </div>
-            ))}
+          <div key={category} className="card">
+            <div className="card-content">
+              <h3 className="title is-4 has-text-primary">{category}</h3>
+              {articles.map((article, index) => (
+                <div key={index} className="card article-card">
+                  <div className="card-content">
+                    <h4 className="title is-5">
+                      <a href={article.link} target="_blank" rel="noopener noreferrer" className="has-text-primary">
+                        {article.title}
+                      </a>
+                    </h4>
+                    {article.description && (
+                      <div className="content has-text-grey">{article.description}</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         ))}
       </>
@@ -101,64 +107,67 @@ function App() {
   const renderRawData = () => {
     if (loading) {
       return (
-        <div className="loading">
+        <div className="loading-container">
           <div className="spinner"></div>
-          <p>Loading raw data...</p>
+          <p className="has-text-grey">Loading raw data...</p>
         </div>
       )
     }
 
     if (error) {
       return (
-        <div className="error-message">
+        <div className="notification is-danger error-notification">
           Error loading data: {error}. Please try again.
         </div>
       )
     }
 
     if (!data?.rawData) {
-      return <p>No raw data available.</p>
+      return <p className="has-text-grey">No raw data available.</p>
     }
 
     return (
-      <div className="section">
-        <h3>Raw Feed Data</h3>
-        <pre style={{
-          background: '#f8f9fa',
-          padding: '20px',
-          borderRadius: '8px',
-          overflowX: 'auto',
-          maxHeight: '500px',
-          overflowY: 'auto'
-        }}>
-          {JSON.stringify(data.rawData, null, 2)}
-        </pre>
+      <div className="card">
+        <div className="card-content">
+          <h3 className="title is-4">Raw Feed Data</h3>
+          <div className="raw-data-container">
+            <pre>{JSON.stringify(data.rawData, null, 2)}</pre>
+          </div>
+        </div>
       </div>
     )
   }
 
   const renderStats = () => {
     if (!data?.stats) {
-      return <p>No statistics available.</p>
+      return <p className="has-text-grey">No statistics available.</p>
     }
 
     return (
-      <div className="stats">
-        <div className="stat-card">
-          <h3>{data.stats.totalFeeds || 0}</h3>
-          <p>Total Feeds</p>
+      <div className="columns is-multiline">
+        <div className="column is-3">
+          <div className="stat-card">
+            <p className="title">{data.stats.totalFeeds || 0}</p>
+            <p className="subtitle">Total Feeds</p>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{data.stats.successfulFeeds || 0}</h3>
-          <p>Successful</p>
+        <div className="column is-3">
+          <div className="stat-card">
+            <p className="title">{data.stats.successfulFeeds || 0}</p>
+            <p className="subtitle">Successful</p>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{data.stats.totalArticles || 0}</h3>
-          <p>Articles Found</p>
+        <div className="column is-3">
+          <div className="stat-card">
+            <p className="title">{data.stats.totalArticles || 0}</p>
+            <p className="subtitle">Articles Found</p>
+          </div>
         </div>
-        <div className="stat-card">
-          <h3>{data.stats.categories || 0}</h3>
-          <p>Categories</p>
+        <div className="column is-3">
+          <div className="stat-card">
+            <p className="title">{data.stats.categories || 0}</p>
+            <p className="subtitle">Categories</p>
+          </div>
         </div>
       </div>
     )
@@ -166,43 +175,53 @@ function App() {
 
   return (
     <div className="container">
-      <div className="header">
-        <h1>RSS Feed Analysis</h1>
-        <p>AI-powered insights from multiple news sources</p>
-      </div>
-
-      <div className="content">
-        <div className="tabs">
-          <button
-            className={`tab ${activeTab === 'analysis' ? 'active' : ''}`}
-            onClick={() => showTab('analysis')}
-          >
-            Analysis
-          </button>
-          <button
-            className={`tab ${activeTab === 'raw' ? 'active' : ''}`}
-            onClick={() => showTab('raw')}
-          >
-            Raw Data
-          </button>
-          <button
-            className={`tab ${activeTab === 'stats' ? 'active' : ''}`}
-            onClick={() => showTab('stats')}
-          >
-            Statistics
-          </button>
+      <section className="hero">
+        <div className="hero-body">
+          <div className="container">
+            <h1 className="title is-1 has-text-white">RSS Feed Analysis</h1>
+            <p className="subtitle is-4 has-text-white">AI-powered insights from multiple news sources</p>
+          </div>
         </div>
+      </section>
 
-        <div className={`tab-content ${activeTab === 'analysis' ? 'active' : ''}`}>
-          {renderAnalysis()}
-        </div>
+      <div className="container">
+        <div className="card">
+          <div className="card-content">
+            <div className="tabs is-boxed">
+              <ul>
+                <li className={activeTab === 'analysis' ? 'is-active' : ''}>
+                  <a onClick={() => showTab('analysis')}>
+                    <span className="icon is-small">
+                      <i className="fas fa-chart-line"></i>
+                    </span>
+                    <span>Analysis</span>
+                  </a>
+                </li>
+                <li className={activeTab === 'raw' ? 'is-active' : ''}>
+                  <a onClick={() => showTab('raw')}>
+                    <span className="icon is-small">
+                      <i className="fas fa-code"></i>
+                    </span>
+                    <span>Raw Data</span>
+                  </a>
+                </li>
+                <li className={activeTab === 'stats' ? 'is-active' : ''}>
+                  <a onClick={() => showTab('stats')}>
+                    <span className="icon is-small">
+                      <i className="fas fa-chart-bar"></i>
+                    </span>
+                    <span>Statistics</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
 
-        <div className={`tab-content ${activeTab === 'raw' ? 'active' : ''}`}>
-          {renderRawData()}
-        </div>
-
-        <div className={`tab-content ${activeTab === 'stats' ? 'active' : ''}`}>
-          {renderStats()}
+            <div className="mt-5">
+              {activeTab === 'analysis' && renderAnalysis()}
+              {activeTab === 'raw' && renderRawData()}
+              {activeTab === 'stats' && renderStats()}
+            </div>
+          </div>
         </div>
       </div>
     </div>
