@@ -44,7 +44,7 @@ async function main() {
         }
 
         const interestingArticles = await findInterestingArticles(
-            "Find articles focusing on geopolitics and economics, list the article titles and links, and write a short summary of how the articles relate to each other, and the general geopolitical situation",
+            config.ai || {},
             parsedResults.map(r => r.content).join('\n\n')
         );
         console.log(interestingArticles);
