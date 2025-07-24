@@ -46,7 +46,13 @@ The application provides a clean web interface with:
          "name": "Reddit Economy",
          "url": "https://www.reddit.com/r/economy.rss"
        }
-     ]
+     ],
+     "ai": {
+       "model": "deepseek-chat",
+       "temperature": 0.3,
+       "systemPrompt": "You're a helpful assistant who can analyze news articles and find the most important ones. You will be given a list of news articles and you will need to find the most relevant ones. You will need to return a list of the most important articles.",
+       "userPrompt": "Find articles focusing on geopolitics and economics, list the article titles and links, and write a short summary of how the articles relate to each other, and the general geopolitical situation."
+     }
    }
    ```
 
@@ -54,19 +60,39 @@ The application provides a clean web interface with:
 
 ### Web Interface (Recommended)
 
-1. **Start the server**:
+#### Development Mode (Run Frontend and Backend Separately)
+
+1. **Start the backend server** (in one terminal):
    ```bash
    npm run server
-   # or
-   npm run dev
    ```
+   This runs the Express API at http://localhost:3000
 
-2. **Open your browser**:
+2. **Start the Vite frontend dev server** (in another terminal):
+   ```bash
+   npm run vite
+   ```
+   This runs the React app at http://localhost:5173
+
+3. **Open your browser**:
+   Navigate to `http://localhost:5173` for the frontend (the frontend will proxy API requests to the backend).
+
+#### Production Mode
+
+1. **Build the React app**:
+   ```bash
+   npm run build
+   ```
+   This outputs the static files to the `dist` directory.
+
+2. **Start the production server**:
+   ```bash
+   npm run server
+   ```
+   The backend will serve the built frontend at `http://localhost:3000`.
+
+3. **Open your browser**:
    Navigate to `http://localhost:3000`
-
-3. **View analysis**:
-   - The application will automatically fetch and analyze all configured feeds
-   - Switch between tabs to view different aspects of the data
 
 ### Command Line Interface
 
@@ -98,7 +124,7 @@ Add RSS feeds to `config.json`:
     "model": "deepseek-chat",
     "temperature": 0.3,
     "systemPrompt": "You're a helpful assistant who can analyze news articles and find the most important ones. You will be given a list of news articles and you will need to find the most relevant ones. You will need to return a list of the most important articles.",
-    "userPrompt": "Find articles focusing on geopolitics and economics, list the article titles and links, and write a short summary of how the articles relate to each other, and the general geopolitical situation"
+    "userPrompt": "Find articles focusing on geopolitics and economics, list the article titles and links, and write a short summary of how the articles relate to each other, and the general geopolitical situation."
   }
 }
 ```
